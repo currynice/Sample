@@ -1,0 +1,59 @@
+server:
+  port: 80
+spring:
+  datasource:
+    url: jdbc:h2:~/im
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 123456
+    schema: classpath:db/schema.sql
+    data: classpath:db/data.sql
+
+  h2:
+    console:
+      path: /h2-console
+      enabled: true
+
+  jpa:
+    database: h2
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  #redis配置，默认值都是
+  redis:
+    host: localhost
+    database: 5
+      #连接池配置
+    jedis:
+      pool:
+        max-active: 8   #最大连接数
+        max-idle: 8 #最大空闲连接数
+        max-wait: -1   #最大阻塞等待时间
+        min-idle: 0  #最小空闲连接数
+#使spring-data-redis生效,@EnableRedisRepositories也可以，不过配置文件更灵活
+  data:
+    redis:
+      repositories:
+        enabled: true
+
+websocket:
+  connector:
+    server:
+      readIdleSecond: 0
+      writeIdleSecond: 0
+      allIdleSecond: 360
+      sendBuff: -1
+      recvBuff: -1
+      backlog: 500000
+      bossThreads: 1
+      connTimeoutMills: 10000
+      soLinger: 0
+      port: 8082
+      reuseAddr: true
+      useDirectBuffer: true
+      useEpoll: true
+      useMemPool: true
+      userThreads: 50
+      workerThreads: 0
+      idleTimes: 5
+
