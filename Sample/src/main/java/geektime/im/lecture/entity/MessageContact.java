@@ -1,7 +1,11 @@
 package geektime.im.lecture.entity;
 
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
+
+
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -9,9 +13,15 @@ import javax.persistence.IdClass;
 import javax.persistence.Table;
 import java.util.Date;
 
+/**
+ * 联系人表
+ */
 @Entity
 @Table(name = "IM_MSG_CONTACT")
 @IdClass(ContactMultiKeys.class)
+@Getter
+@Setter
+@ToString
 public class MessageContact {
     @Id
     private Long ownerUid;
@@ -22,43 +32,5 @@ public class MessageContact {
 
     private Date createTime;
 
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
-    public Long getOwnerUid() {
-        return ownerUid;
-    }
-
-    public void setOwnerUid(Long ownerUid) {
-        this.ownerUid = ownerUid;
-    }
-
-    public Long getOtherUid() {
-        return otherUid;
-    }
-
-    public void setOtherUid(Long otherUid) {
-        this.otherUid = otherUid;
-    }
-
-    public Long getMid() {
-        return mid;
-    }
-
-    public void setMid(Long mid) {
-        this.mid = mid;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
 
 }

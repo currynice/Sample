@@ -1,25 +1,23 @@
 package geektime.im.lecture.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+
 import java.io.Serializable;
 
+
+/**
+ * 关系索引表的联合主键
+ */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class RelationMultiKeys implements Serializable {
 
     protected Long mid;
     protected Long ownerUid;
 
-    public Long getMid() {
-        return mid;
-    }
 
-    public void setMid(Long mid) {
-        this.mid = mid;
-    }
-
-    public Long getOwnerUid() {
-        return ownerUid;
-    }
-
-    public void setOwnerUid(Long ownerUid) {
-        this.ownerUid = ownerUid;
-    }
 }

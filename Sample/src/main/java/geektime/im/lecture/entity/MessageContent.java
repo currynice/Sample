@@ -1,10 +1,18 @@
 package geektime.im.lecture.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.Date;
 
+/**
+ * 消息内容
+ */
 @Entity
 @Table(name = "IM_MSG_CONTENT")
+@Getter
+@Setter
 public class MessageContent {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -15,51 +23,4 @@ public class MessageContent {
     private Integer msgType;
     private Date createTime;
 
-    public Long getMid() {
-        return mid;
-    }
-
-    public void setMid(Long mid) {
-        this.mid = mid;
-    }
-
-    public Long getSenderId() {
-        return senderId;
-    }
-
-    public void setSenderId(Long senderId) {
-        this.senderId = senderId;
-    }
-
-    public Long getRecipientId() {
-        return recipientId;
-    }
-
-    public void setRecipientId(Long recipientId) {
-        this.recipientId = recipientId;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public Integer getMsgType() {
-        return msgType;
-    }
-
-    public void setMsgType(Integer msgType) {
-        this.msgType = msgType;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
 }

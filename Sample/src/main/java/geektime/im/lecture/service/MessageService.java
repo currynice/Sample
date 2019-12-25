@@ -1,10 +1,8 @@
 package geektime.im.lecture.service;
 
 
-import geektime.im.lecture.entity.MessageContent;
 import geektime.im.lecture.vo.MessageContactVO;
 import geektime.im.lecture.vo.MessageVO;
-
 import java.util.List;
 
 public interface MessageService {
@@ -12,10 +10,10 @@ public interface MessageService {
     /**
      * 发新消息
      *
-     * @param senderUid
-     * @param recipientUid
-     * @param content
-     * @param msgType
+     * @param senderUid 发送方
+     * @param recipientUid  接收方
+     * @param content    内容
+     * @param msgType    消息类型
      * @return
      */
     MessageVO sendNewMsg(long senderUid, long recipientUid, String content, int msgType);

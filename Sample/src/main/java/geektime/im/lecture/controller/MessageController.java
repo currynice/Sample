@@ -2,7 +2,6 @@ package geektime.im.lecture.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import geektime.im.lecture.entity.MessageContent;
 import geektime.im.lecture.service.MessageService;
 import geektime.im.lecture.vo.MessageContactVO;
 import geektime.im.lecture.vo.MessageVO;

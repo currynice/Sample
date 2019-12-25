@@ -1,11 +1,19 @@
 package geektime.im.lecture.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.Date;
 
+/**
+ * 消息关系索引表
+ */
 @Entity
 @Table(name = "IM_MSG_RELATION")
 @IdClass(RelationMultiKeys.class)
+@Getter
+@Setter
 public class MessageRelation {
 
     @Id
@@ -13,48 +21,12 @@ public class MessageRelation {
     @Id
     private Long ownerUid;
 
+    //0:一条sender的发件箱索引   1:一条recipient的收件箱索引
     private Integer type;
 
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
 
     private Long otherUid;
     private Date createTime;
 
-    public Long getMid() {
-        return mid;
-    }
 
-    public void setMid(Long mid) {
-        this.mid = mid;
-    }
-
-    public Long getOwnerUid() {
-        return ownerUid;
-    }
-
-    public void setOwnerUid(Long ownerUid) {
-        this.ownerUid = ownerUid;
-    }
-
-    public Long getOtherUid() {
-        return otherUid;
-    }
-
-    public void setOtherUid(Long otherUid) {
-        this.otherUid = otherUid;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
 }

@@ -2,11 +2,10 @@ package geektime.im.lecture;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.ServletComponentScan;
+
 
 
 @SpringBootApplication(scanBasePackages = {"geektime.im.lecture"})
-@ServletComponentScan(basePackages = {"geektime.im.lecture.controller"})
 public class Starter {
 
 

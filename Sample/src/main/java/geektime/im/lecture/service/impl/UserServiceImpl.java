@@ -9,18 +9,21 @@ import geektime.im.lecture.entity.User;
 import geektime.im.lecture.exceptions.InvalidUserInfoException;
 import geektime.im.lecture.exceptions.UserNotExistException;
 import geektime.im.lecture.service.UserService;
+import geektime.im.lecture.vo.ContactInfo;
 import geektime.im.lecture.vo.MessageContactVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Service
 public class UserServiceImpl implements UserService {
+
+
 
     private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -30,19 +33,22 @@ public class UserServiceImpl implements UserService {
     private MessageContactRepository contactRepository;
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private MessageContentRepository contentRepository;
+
 
     @Autowired
-    private MessageContentRepository contentRepository;
+    private RedisTemplate redisTemplate;
+
+
 
     @Override
     public User login(String email, String password) {
-        List<User> users = userRepository.findByEmail(email);
-        if (null == users || users.isEmpty()) {
+        //根据邮箱账号登录
+      User user = userRepository.findByEmailEquals(email);
+        if (null == user) {
             log.warn("该用户不存在:" + email);
             throw new UserNotExistException("该用户不存在:" + email);
         } else {
-            User user = users.get(0);
             if (user.getPassword().equals(password)) {
                 log.info(user.getUsername() + " logged in!");
                 return user;
@@ -53,32 +59,29 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-
+    //获得除exceptUid外的所有用户
     @Override
     public List<User> getAllUsersExcept(long exceptUid) {
-        List<User> otherUsers = userRepository.findAll();
+        List<User> allUsers = userRepository.findAll();
         Optional<User>  userOptional = userRepository.findById(exceptUid);
-
-        //        if (!userOptional.isPresent()) {
-//            return otherUsers;
-//        }
-//        otherUsers.remove(userOptional.get());
-//        return otherUsers;
-         userOptional.ifPresent(user -> otherUsers.remove(user));
-          return otherUsers;
+         userOptional.ifPresent(user -> allUsers.remove(user));
+          return allUsers;
     }
 
     @Override
     public List<User> getAllUsersExcept(User exceptUser) {
-        List<User> otherUsers = userRepository.findUsersByUidIsNot(exceptUser.getUid());
-        return otherUsers;
+        return userRepository.findUsersByUidIsNot(exceptUser.getUid());
     }
+
+
 
     @Override
     public MessageContactVO getContacts(User ownerUser) {
         List<MessageContact> contacts = contactRepository.findMessageContactsByOwnerUidOrderByMidDesc(ownerUser.getUid());
         if (contacts != null) {
+            //未读总数
             long totalUnread = 0;
+
             Object totalUnreadObj = redisTemplate.opsForValue().get(ownerUser.getUid() + "_T");
             if (null != totalUnreadObj) {
                 totalUnread = Long.parseLong((String) totalUnreadObj);
@@ -92,13 +95,14 @@ public class UserServiceImpl implements UserService {
 
                 User otherUser = userRepository.findById(contact.getOtherUid()).orElse(null);
 
+
                 if (null != contentVO) {
                     long convUnread = 0;
                     Object convUnreadObj = redisTemplate.opsForHash().get(ownerUser.getUid() + "_C", otherUser.getUid());
                     if (null != convUnreadObj) {
                         convUnread = Long.parseLong((String) convUnreadObj);
                     }
-                    MessageContactVO.ContactInfo contactInfo = contactVO.new ContactInfo(otherUser.getUid(), otherUser.getUsername(), otherUser.getAvatar(), mid, contact.getType(), contentVO.getContent(), convUnread, contact.getCreateTime());
+                    ContactInfo contactInfo = new ContactInfo(otherUser.getUid(), otherUser.getUsername(), otherUser.getAvatar(), mid, contact.getType(), contentVO.getContent(), convUnread, contact.getCreateTime());
                     contactVO.appendContact(contactInfo);
                 }
             });

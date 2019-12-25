@@ -12,5 +12,7 @@ public interface MessageRelationRepository extends JpaRepository<MessageRelation
 
     List<MessageRelation> findAllByOwnerUidAndOtherUidOrderByMidAsc(Long ownerUid, Long otherUid);
 
+
+    //WHERE owner_uid = ? AND owner_uid = ? And mid >= ? ORDER BY ？
     List<MessageRelation> findAllByOwnerUidAndOtherUidAndMidIsGreaterThanOrderByMidAsc(Long ownerUid, Long otherUid, Long lastMid);
 }

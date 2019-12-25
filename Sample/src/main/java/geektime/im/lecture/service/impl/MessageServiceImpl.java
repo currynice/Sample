@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -42,26 +43,29 @@ public class MessageServiceImpl implements MessageService {
         messageContent.setContent(content);
         messageContent.setMsgType(msgType);
         messageContent.setCreateTime(currentTime);
+        //返回生成的，获取db生成的mid
         messageContent = contentRepository.saveAndFlush(messageContent);
         Long mid = messageContent.getMid();
 
-        /**存发件人的发件箱*/
+        /**存发件人的发件箱索引*/
         MessageRelation messageRelationSender = new MessageRelation();
         messageRelationSender.setMid(mid);
         messageRelationSender.setOwnerUid(senderUid);
         messageRelationSender.setOtherUid(recipientUid);
-        messageRelationSender.setType(0);
+        messageRelationSender.setType(0);//发
         messageRelationSender.setCreateTime(currentTime);
-        relationRepository.save(messageRelationSender);
 
-        /**存收件人的收件箱*/
+
+        /**存收件人的收件箱索引*/
         MessageRelation messageRelationRecipient = new MessageRelation();
         messageRelationRecipient.setMid(mid);
         messageRelationRecipient.setOwnerUid(recipientUid);
         messageRelationRecipient.setOtherUid(senderUid);
-        messageRelationRecipient.setType(1);
+        messageRelationRecipient.setType(1);//出
         messageRelationRecipient.setCreateTime(currentTime);
-        relationRepository.save(messageRelationRecipient);
+
+
+        relationRepository.saveAll(Arrays.asList(messageRelationSender,messageRelationRecipient));
 
         /**更新发件人的最近联系人 */
         MessageContact messageContactSender = contactRepository.findById(new ContactMultiKeys(senderUid, recipientUid)).orElse(null);

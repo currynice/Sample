@@ -8,9 +8,10 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+    // .... WHERE email= ?
+    User findByEmailEquals(String email);
 
-    List<User> findByEmail(String email);
-
+    //... WHERE uid <>= ?
     List<User> findUsersByUidIsNot(long uid);
 
 }

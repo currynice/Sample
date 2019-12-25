@@ -9,16 +9,16 @@ spring:
     schema: classpath:db/schema.sql
     data: classpath:db/data.sql
 
-  h2:
-    console:
-      path: /h2-console
-      enabled: true
+
 
   jpa:
-    database: h2
-    show-sql: true
+    #转为非内存数据库时修改
     hibernate:
       ddl-auto: update
+    database: h2
+    show-sql: true
+    properties:
+      format_sql: true
   #redis配置，默认值都是
   redis:
     host: localhost
@@ -35,6 +35,8 @@ spring:
     redis:
       repositories:
         enabled: true
+  profiles:
+    active: log
 
 websocket:
   connector:
