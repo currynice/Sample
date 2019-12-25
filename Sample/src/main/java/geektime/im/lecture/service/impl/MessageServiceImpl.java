@@ -9,6 +9,7 @@ import geektime.im.lecture.dao.MessageRelationRepository;
 import geektime.im.lecture.dao.UserRepository;
 import geektime.im.lecture.entity.*;
 import geektime.im.lecture.service.MessageService;
+import geektime.im.lecture.vo.ContactInfo;
 import geektime.im.lecture.vo.MessageContactVO;
 import geektime.im.lecture.vo.MessageVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,6 +121,13 @@ public class MessageServiceImpl implements MessageService {
         return composeMessageVO(relationList, ownerUid, otherUid);
     }
 
+    /**
+     * 把根据索引关系查出消息，变更未读
+     * @param relationList
+     * @param ownerUid
+     * @param otherUid
+     * @return
+     */
     private List<MessageVO> composeMessageVO(List<MessageRelation> relationList, long ownerUid, long otherUid) {
         if (null != relationList && !relationList.isEmpty()) {
             /** 先拼接消息索引和内容 */
@@ -142,7 +150,7 @@ public class MessageServiceImpl implements MessageService {
                 long convUnread = Long.parseLong((String) convUnreadObj);
                 redisTemplate.opsForHash().delete(ownerUid + Constants.CONVERSION_UNREAD_SUFFIX, otherUid);
                 long afterCleanUnread = redisTemplate.opsForValue().increment(ownerUid + Constants.TOTAL_UNREAD_SUFFIX, -convUnread);
-                /** 修正总未读 */
+                /** 没有未读，修正总未读 */
                 if (afterCleanUnread <= 0) {
                     redisTemplate.delete(ownerUid + Constants.TOTAL_UNREAD_SUFFIX);
                 }
@@ -175,7 +183,7 @@ public class MessageServiceImpl implements MessageService {
                     if (null != convUnreadObj) {
                         convUnread = Long.parseLong((String) convUnreadObj);
                     }
-                    MessageContactVO.ContactInfo contactInfo = contactVO.new ContactInfo(otherUser.getUid(), otherUser.getUsername(), otherUser.getAvatar(), mid, contact.getType(), contentVO.getContent(), convUnread, contact.getCreateTime());
+                    ContactInfo contactInfo = new ContactInfo(otherUser.getUid(), otherUser.getUsername(), otherUser.getAvatar(), mid, contact.getType(), contentVO.getContent(), convUnread, contact.getCreateTime());
                     contactVO.appendContact(contactInfo);
                 }
             });

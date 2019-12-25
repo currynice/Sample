@@ -1,6 +1,6 @@
 function init() {
     if (window.WebSocket) {
-        websocket = new WebSocket("ws://127.0.0.1:8082");
+        websocket = new WebSocket("ws://127.0.0.1:8089");
         websocket.onmessage = function (event) {
             onmsg(event);
         };
@@ -66,7 +66,7 @@ var onmsg = function (event) {
 };
 
 function reconnect() {
-    websocket = new WebSocket("ws://127.0.0.1:8082");
+    websocket = new WebSocket("ws://127.0.0.1:8089");
     $("#ws_status").text("重新上线");
     websocket.onmessage = function (event) {
         onmsg(event);
